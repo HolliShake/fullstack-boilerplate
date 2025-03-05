@@ -17,4 +17,4 @@ COPY ./api .
 EXPOSE 3000
 
 # Set the default command based on NODE_ENV
-CMD [ "sh", "-c", "if [ \"$NODE_ENV\" = 'development' ]; then npm run dev; else npm run start; fi" ]
+CMD [ "npm", "run", "start:dev" ]
