@@ -11,8 +11,8 @@ export class GenericController<TModel, TService extends GenericService<TModel>> 
     }
 
     @Get(":id")
-    async genericGet(@Param('id') id: string): Promise<TModel | null> {
-        return await this.service.getById(Number(id)); // Convert id to number
+    async genericGetById(@Param('id') id: string): Promise<TModel | null> {
+        return await this.service.getById(Number(id));
     }
 
     @Post("create")
@@ -28,6 +28,6 @@ export class GenericController<TModel, TService extends GenericService<TModel>> 
     @Delete("delete/:id")
     async genericDelete(@Param('id') id: string): Promise<{ success: boolean }> {
         const deleted = await this.service.delete(Number(id));
-        return { success: deleted }; // Return an object for better JSON response
+        return { success: deleted };
     }
 }
