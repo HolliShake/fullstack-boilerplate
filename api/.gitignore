@@ -394,7 +394,12 @@ Temporary Items
 
 =======
 # Local
-.env
+# Ignore all .env files
+.env*
+
+# But allow .env.example
+!.env.example
+
 dist
 .webpack
 .serverless/**/*.zip
