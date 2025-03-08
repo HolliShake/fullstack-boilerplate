@@ -1,0 +1,15 @@
+import { Controller } from '@nestjs/common';
+import { GenericController } from './generic.controller';
+// Service
+import { {{ModelName}}Service } from '@/services/{{KebabName}}.service';
+// Dto
+import { Set{{ModelName}}Dto } from '@/dto/{{KebabName}}/{{KebabName}}.set';
+// Model
+import { {{ModelName}}Model } from '@/models/{{KebabName}}.model';
+
+@Controller("{{NormalizedName}}")
+export class {{ModelName}}Controller extends GenericController <{{ModelName}}Model, Set{{ModelName}}Dto, {{ModelName}}Service> {
+	constructor(protected readonly {{NormalizedName}}Service: {{ModelName}}Service) {
+		super({{NormalizedName}}Service);
+	}
+}
