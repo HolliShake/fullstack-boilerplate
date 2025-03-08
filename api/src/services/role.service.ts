@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 // Service
 import { GenericService } from './generic.service';
@@ -8,7 +8,7 @@ import { GetRoleDto } from '@/dto/role/role.get';
 
 @Injectable()
 export class RoleService extends GenericService<GetRoleDto, SetRoleDto> {
-  constructor(prisma: PrismaService) {
-    super(prisma);
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma);
+	}
 }

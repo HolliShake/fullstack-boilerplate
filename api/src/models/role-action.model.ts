@@ -1,5 +1,5 @@
 export class RoleActionModel {
-  id: number;
-  action: string;
-  roleId: number;
+	id: number;
+	action: string;
+	roleId: number;
 }
