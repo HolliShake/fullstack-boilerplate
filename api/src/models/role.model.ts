@@ -1,3 +1,4 @@
-export interface RoleModel {
-  roleName: string;
-}
+// export class RoleModel {
+//   id: number;
+//   roleName: string;
+// }

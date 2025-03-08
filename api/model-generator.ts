@@ -21,77 +21,60 @@ async function main() {
 
     // Paths for the generated files
     const filePaths = {
-        dto: `${outputPath}/dto/${kebabCaseName}/${kebabCaseName}.set.ts`,
+        dto_set: `${outputPath}/dto/${kebabCaseName}/${kebabCaseName}.set.ts`,
+        dto_get: `${outputPath}/dto/${kebabCaseName}/${kebabCaseName}.get.ts`,
         model: `${outputPath}/models/${kebabCaseName}.model.ts`,
         controller: `${outputPath}/controllers/${kebabCaseName}.controller.ts`,
         service: `${outputPath}/services/${kebabCaseName}.service.ts`
     };
 
-    // Check if any of the files already exist
-    const existingFiles = await Promise.all(
-        Object.values(filePaths).map(async filePath => (await fs.pathExists(filePath)) ? filePath : null)
-    );
-
-    const filteredExistingFiles = existingFiles.filter(Boolean);
-
-    if (filteredExistingFiles.length > 0) {
-        console.log('❌ Aborting: The following files already exist:');
-        filteredExistingFiles.forEach(file => console.log(`   - ${file}`));
-        return;
-    }
-
     try {
-        // Ensure template files exist before reading
         const templateFiles = {
-            dto: path.resolve(__dirname, 'templates/dto.template.txt'),
+            dto_set: path.resolve(__dirname, 'templates/dto.set.template.txt'),
+            dto_get: path.resolve(__dirname, 'templates/dto.get.template.txt'),
             model: path.resolve(__dirname, 'templates/model.template.txt'),
             controller: path.resolve(__dirname, 'templates/controller.template.txt'),
             service: path.resolve(__dirname, 'templates/service.template.txt')
         };
 
-        for (const filePath of Object.values(templateFiles)) {
-            if (!(await fs.pathExists(filePath))) {
-                throw new Error(`Template file not found: ${filePath}`);
-            }
-        }
-
-        // Read templates asynchronously
-        const [dtoTemplate, modelTemplate, controllerTemplate, serviceTemplate] = await Promise.all([
-            fs.readFile(templateFiles.dto, 'utf-8'),
+        const [dtoSetTemplate, dtoGetTemplate, modelTemplate, controllerTemplate, serviceTemplate] = await Promise.all([
+            fs.readFile(templateFiles.dto_set, 'utf-8'),
+            fs.readFile(templateFiles.dto_get, 'utf-8'),
             fs.readFile(templateFiles.model, 'utf-8'),
             fs.readFile(templateFiles.controller, 'utf-8'),
             fs.readFile(templateFiles.service, 'utf-8')
         ]);
 
-        // Replace placeholders
+        const formatFields = (isDto) =>
+            fields.split(',').map(f => {
+                const [name, type] = f.trim().split(':');
+                return isDto ? `  @ApiProperty()\n  ${name}: ${type};` : `  ${name}: ${type};`;
+            }).join('\n\n');
+
         const replacements = {
             '{{ModelName}}': pascalCaseName,
             '{{NormalizedName}}': camelCaseName,
             '{{KebabName}}': kebabCaseName,
-            '{{fields}}': fields.split(',').map(f => `  ${f.trim().replace(':', ': ')}`).join(';\n') + ';'
+            '{{fieldsDto}}': formatFields(true),
+            '{{fieldsModel}}': formatFields(false)
         };
 
-        const replacePlaceholders = (template: string) =>
-            Object.entries(replacements).reduce((content, [key, value]) => content.replace(new RegExp(key, 'g'), value), template);
+        const replacePlaceholders = (template) =>
+            Object.entries(replacements).reduce((content, [key, value]) =>
+                content.replace(new RegExp(key, 'g'), value), template);
 
-        // Prepare file content
-        const dtoContent = replacePlaceholders(dtoTemplate);
-        const modelContent = replacePlaceholders(modelTemplate);
-        const controllerContent = replacePlaceholders(controllerTemplate);
-        const serviceContent = replacePlaceholders(serviceTemplate);
-
-        // Create directories
-        await fs.ensureDir(path.dirname(filePaths.dto));
+        await fs.ensureDir(path.dirname(filePaths.dto_set));
+        await fs.ensureDir(path.dirname(filePaths.dto_get));
         await fs.ensureDir(path.dirname(filePaths.model));
         await fs.ensureDir(path.dirname(filePaths.controller));
         await fs.ensureDir(path.dirname(filePaths.service));
 
-        // Write files
         await Promise.all([
-            fs.writeFile(filePaths.dto, dtoContent),
-            fs.writeFile(filePaths.model, modelContent),
-            fs.writeFile(filePaths.controller, controllerContent),
-            fs.writeFile(filePaths.service, serviceContent)
+            fs.writeFile(filePaths.dto_set, replacePlaceholders(dtoSetTemplate)),
+            fs.writeFile(filePaths.dto_get, replacePlaceholders(dtoGetTemplate)),
+            fs.writeFile(filePaths.model, replacePlaceholders(modelTemplate)),
+            fs.writeFile(filePaths.controller, replacePlaceholders(controllerTemplate)),
+            fs.writeFile(filePaths.service, replacePlaceholders(serviceTemplate))
         ]);
 
         console.log(`✅ Successfully generated DTO, Model, Controller, and Service for '${pascalCaseName}'!`);

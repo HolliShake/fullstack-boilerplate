@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SetRoleDto {
+export class GetRoleDto {
   @ApiProperty()
   id: number;
 

@@ -3,10 +3,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
-export class GenericService <TModel, TSetter> {
+export class GenericService <TGetter, TSetter> {
     constructor(private readonly prisma: PrismaService) {}
 
-    private get resolveName() {
+    public get resolveName() {
         return this.constructor.name.replaceAll("Service", "").toLowerCase();
     }
 
@@ -14,7 +14,7 @@ export class GenericService <TModel, TSetter> {
         return !!(await this.prisma.user.findFirstOrThrow({ where: { id } }));
     }    
 
-    public async getById(id: number): Promise<TModel|null|undefined> {
+    public async getById(id: number): Promise<TGetter|null|undefined> {
         if (!(await this.exists(id))) {
             throw new NotFoundException('url not found');
         }
@@ -23,17 +23,17 @@ export class GenericService <TModel, TSetter> {
         });
     }
 
-    public async getAll(): Promise<TModel[]> {
+    public async getAll(): Promise<TGetter[]> {
         return await (this.prisma as any)[this.resolveName].findMany();
     }
 
-    public async create(data: TSetter): Promise<TModel|null|undefined> {
+    public async create(data: TSetter): Promise<TGetter|null|undefined> {
         return await (this.prisma as any)[this.resolveName].create({
             data
         });
     }
 
-    public async update(id: number, data: TSetter): Promise<TModel|null|undefined> {
+    public async update(id: number, data: TSetter): Promise<TGetter|null|undefined> {
         if (!(await this.exists(id))) {
             throw new NotFoundException('url not found');
         }
@@ -43,7 +43,7 @@ export class GenericService <TModel, TSetter> {
         });
     }
 
-    public async delete(id: number): Promise<TModel|null|undefined> {
+    public async delete(id: number): Promise<TGetter|null|undefined> {
         if (!(await this.exists(id))) {
             throw new NotFoundException('url not found');
         }

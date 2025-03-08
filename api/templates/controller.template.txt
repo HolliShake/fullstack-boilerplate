@@ -1,15 +1,107 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Response } from 'express';
+// GenericController
 import { GenericController } from './generic.controller';
 // Service
 import { {{ModelName}}Service } from '@/services/{{KebabName}}.service';
 // Dto
 import { Set{{ModelName}}Dto } from '@/dto/{{KebabName}}/{{KebabName}}.set';
-// Model
-import { {{ModelName}}Model } from '@/models/{{KebabName}}.model';
+import { Get{{ModelName}}Dto } from '@/dto/{{KebabName}}/{{KebabName}}.get';
 
+@ApiTags("{{ModelName}}")
 @Controller("{{NormalizedName}}")
-export class {{ModelName}}Controller extends GenericController <{{ModelName}}Model, Set{{ModelName}}Dto, {{ModelName}}Service> {
+export class {{ModelName}}Controller extends GenericController <Get{{ModelName}}Dto, Set{{ModelName}}Dto, {{ModelName}}Service> {
 	constructor(protected readonly {{NormalizedName}}Service: {{ModelName}}Service) {
 		super({{NormalizedName}}Service);
 	}
+
+	@Get("all")
+    @ApiOperation({ 
+        summary: 'Retrieve all {{ModelName}} records', 
+        operationId: 'getAll{{ModelName}}' 
+    })
+    @ApiResponse({ 
+        status: 200, 
+        description: 'Successfully retrieved {{ModelName}} records', 
+		type: [Get{{ModelName}}Dto]
+	})
+    @ApiOperation({ 
+        summary: 'Retrieve a single {{ModelName}} by ID', 
+        operationId: 'get{{ModelName}}ById' 
+    })
+    @ApiResponse({ 
+        status: 200, 
+        description: 'Successfully retrieved the {{ModelName}}', 
+		type: Get{{ModelName}}Dto
+    })
+    @ApiResponse({ 
+        status: 404, 
+        description: '{{ModelName}} not found' 
+    })
+    async get{{ModelName}}(@Res() res: Response, @Param('id') id: string): Promise<Response<Get{{ModelName}}Dto|null|undefined>> {
+        return await this.genericGetById(res, id);
+    }
+
+    @Post("create")
+    @ApiOperation({ 
+        summary: 'Create a new {{ModelName}}', 
+        operationId: 'create{{ModelName}}' 
+    })
+    @ApiResponse({ 
+        status: 201, 
+        description: '{{ModelName}} successfully created',  
+		type: Get{{ModelName}}Dto
+    })
+    @ApiResponse({ 
+        status: 400, 
+        description: 'Invalid request data' 
+    })
+    @ApiResponse({ 
+        status: 500, 
+        description: 'Internal server error while creating {{ModelName}}' 
+    })
+    async create{{ModelName}}(@Res() res: Response, @Body() data: Set{{ModelName}}Dto): Promise<Response<Get{{ModelName}}Dto|null|undefined>> {
+        return await this.genericCreate(res, data);
+    }
+
+    @Put("update/:id")
+    @ApiOperation({ 
+        summary: 'Update an existing {{ModelName}}', 
+        operationId: 'update{{ModelName}}' 
+    })
+    @ApiResponse({ 
+        status: 200, 
+        description: '{{ModelName}} successfully updated', 
+		type: Get{{ModelName}}Dto
+    })
+    @ApiResponse({ 
+        status: 404, 
+        description: '{{ModelName}} not found' 
+    })
+    @ApiResponse({ 
+        status: 500, 
+        description: 'Internal server error while updating {{ModelName}}' 
+    })
+    async update{{ModelName}}(@Res() res: Response, @Param('id') id: string, @Body() data: Set{{ModelName}}Dto): Promise<Response<Get{{ModelName}}Dto|null|undefined>> {
+        return await this.genericUpdate(res, id, data);
+    }
+
+    @Delete("delete/:id")
+    @ApiOperation({ 
+        summary: 'Delete a {{ModelName}} by ID', 
+        operationId: 'delete{{ModelName}}' 
+    })
+    @ApiResponse({ 
+        status: 200, 
+        description: '{{ModelName}} successfully deleted', 
+		type: Get{{ModelName}}Dto
+    })
+    @ApiResponse({ 
+        status: 404, 
+        description: '{{ModelName}} not found' 
+    })
+    async delete{{ModelName}}(@Res() res: Response, @Param('id') id: string): Promise<Response<Get{{ModelName}}Dto|null|undefined>> {
+        return await this.genericDelete(res, id);
+    }
 }

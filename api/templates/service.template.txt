@@ -2,13 +2,12 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 // Service
 import { GenericService } from './generic.service';
-// Model
-import { {{ModelName}}Model } from '@/models/{{KebabName}}.model';
 // Dto
 import { Set{{ModelName}}Dto } from '@/dto/{{KebabName}}/{{KebabName}}.set';
+import { Get{{ModelName}}Dto } from '@/dto/{{KebabName}}/{{KebabName}}.get';
 
 @Injectable()
-export class {{ModelName}}Service extends GenericService<{{ModelName}}Model, Set{{ModelName}}Dto> {
+export class {{ModelName}}Service extends GenericService<Get{{ModelName}}Dto, Set{{ModelName}}Dto> {
   constructor(prisma: PrismaService) {
     super(prisma);
   }
