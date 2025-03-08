@@ -26,6 +26,11 @@ export class {{ModelName}}Controller extends GenericController <Get{{ModelName}}
         description: 'Successfully retrieved {{ModelName}} records', 
 		type: [Get{{ModelName}}Dto]
 	})
+	async getAll{{ModelName}}(@Res() res: Response): Promise<Response<Get{{ModelName}}Dto[]>> {
+		return await this.genericGetAll(res);
+	}
+
+	@Get(":id")
     @ApiOperation({ 
         summary: 'Retrieve a single {{ModelName}} by ID', 
         operationId: 'get{{ModelName}}ById' 

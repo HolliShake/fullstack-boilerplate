@@ -26,6 +26,11 @@ export class RoleController extends GenericController <GetRoleDto, SetRoleDto, R
         description: 'Successfully retrieved Role records', 
 		type: [GetRoleDto]
 	})
+    async getAllRole(@Res() res: Response): Promise<Response<GetRoleDto[]>> {
+		return await this.genericGetAll(res);
+	}
+
+    @Get(":id")
     @ApiOperation({ 
         summary: 'Retrieve a single Role by ID', 
         operationId: 'getRoleById' 

@@ -11,7 +11,7 @@ export class GenericService <TGetter, TSetter> {
     }
 
     protected async exists(id: number): Promise<boolean> {
-        return !!(await this.prisma.user.findFirstOrThrow({ where: { id } }));
+        return !!(await (this.prisma as any)[this.resolveName].findFirstOrThrow({ where: { id } }));
     }    
 
     public async getById(id: number): Promise<TGetter|null|undefined> {

@@ -26,6 +26,11 @@ export class UserController extends GenericController <GetUserDto, SetUserDto, U
         description: 'Successfully retrieved User records', 
 		type: [GetUserDto]
 	})
+    async getAllUser(@Res() res: Response): Promise<Response<GetUserDto[]>> {
+		return await this.genericGetAll(res);
+	}
+
+    @Get(":id")
     @ApiOperation({ 
         summary: 'Retrieve a single User by ID', 
         operationId: 'getUserById' 
