@@ -20,5 +20,8 @@ ENV CHOKIDAR_USEPOLLING=true
 # Expose port 3000
 EXPOSE 3001
 
+# Expose port 6006
+EXPOSE 6006
+
 # Set the default command based on NODE_ENV
 CMD [ "npm", "run", "dev" ]

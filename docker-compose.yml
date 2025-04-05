@@ -1,91 +1,75 @@
 services:
-  # NestJS api
-  api:
-    build:
-      dockerfile: ./docker/api/Dockerfile
-    container_name: ${DOCKER_API_CONTAINER_NAME}
-    volumes:
-      - ./api:/usr/src/api:cached
-      - /usr/src/api/node_modules
-    ports:
-      - "3000:3000"
-    depends_on:
-      - database
-    networks:
-      - application
+    # NestJS api
+    api:
+        build:
+            dockerfile: ./docker/api/Dockerfile
+        container_name: ${DOCKER_API_CONTAINER_NAME}
+        volumes:
+            - ./api:/usr/src/api:cached
+            - /usr/src/api/node_modules
+        ports:
+            - '3000:3000'
+        depends_on:
+            - database
+        networks:
+            - application
 
-  # Next.js frontend application
-  app:
-    build:
-      dockerfile: ./docker/app/Dockerfile
-    container_name: ${DOCKER_APP_CONTAINER_NAME}
-    environment:
-      NODE_ENV: development
-      WATCHPACK_POLLING: true
-      CHOKIDAR_USEPOLLING: true
-      TURBO_HASH_UNSTABLE: "1"
-    volumes:
-      - ./app:/usr/src/app:cached
-      - /usr/src/app/node_modules
-    ports:
-      - "3001:3001"
-    depends_on:
-      - api
-    networks:
-      - application
-  
-  # MySQL
-  database:
-    image: mariadb:10.7
-    container_name: ${DOCKER_DATABASE_CONTAINER_NAME}
-    restart: "no"
-    tty: true
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: ${DOCKER_DATABASE_NAME}
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - ./docker/dbdata:/var/lib/mysql
-    networks:
-      - application
+    # Next.js frontend application
+    app:
+        build:
+            dockerfile: ./docker/app/Dockerfile
+        container_name: ${DOCKER_APP_CONTAINER_NAME}
+        environment:
+            NODE_ENV: development
+            WATCHPACK_POLLING: true
+            CHOKIDAR_USEPOLLING: true
+            TURBO_HASH_UNSTABLE: '1'
+        volumes:
+            - ./app:/usr/src/app:cached
+            - /usr/src/app/node_modules
+        ports:
+            - '3001:3001'
+        depends_on:
+            - api
+        networks:
+            - application
 
-  # PHP My Admin
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: ${DOCKER_PHPMYADMIN_CONTAINER_NAME}
-    ports:
-      - "7000:80"
-    links:
-      - database:db
-    environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_PASSWORD: root
-      UPLOAD_LIMIT: 10G
-    networks:
-      - application
-  
-  # Nginx web server to proxy requests
-  webserver:
-    image: nginx:latest
-    container_name: ${DOCKER_WEBSERVER_CONTAINER_NAME}
-    ports:
-      - "80:80"
-    volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - app
-    networks:
-      - application
+    # MySQL
+    database:
+        image: mariadb:10.7
+        container_name: ${DOCKER_DATABASE_CONTAINER_NAME}
+        restart: 'no'
+        tty: true
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_DATABASE: ${DOCKER_DATABASE_NAME}
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - ./docker/dbdata:/var/lib/mysql
+        networks:
+            - application
+
+    # Nginx web server to proxy requests
+    webserver:
+        image: nginx:latest
+        container_name: ${DOCKER_WEBSERVER_CONTAINER_NAME}
+        ports:
+            - '80:80'
+        volumes:
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - app
+        networks:
+            - application
 
 # Networks
 networks:
-  application:
-    name: ${DOCKER_NETWORK_INTERNAL_NAME}
-    driver: bridge
+    application:
+        name: ${DOCKER_NETWORK_INTERNAL_NAME}
+        driver: bridge
 
 # Volumes
 volumes:
-  dbdata:
-    driver: local
+    dbdata:
+        driver: local
