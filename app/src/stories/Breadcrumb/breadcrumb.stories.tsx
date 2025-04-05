@@ -3,18 +3,16 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { ThemeProvider } from '@/components/theme-provider';
 
 const meta: Meta<typeof Breadcrumb> = {
-  title: 'Breadcrumb',
-  component: Breadcrumb,
-  argTypes: {
-
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <Story />
-      </ThemeProvider>
-    ),
-  ],
+	title: 'Breadcrumb',
+	component: Breadcrumb,
+	argTypes: {},
+	decorators: [
+		Story => (
+			<ThemeProvider>
+				<Story />
+			</ThemeProvider>
+		),
+	],
 };
 
 export default meta;
@@ -22,24 +20,22 @@ export default meta;
 type Story = StoryObj<typeof Breadcrumb>;
 
 export const Default: Story = {
-  args: {
-
-  },
-  render: () => (
-    <Breadcrumb >
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/library">Library</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/data">Data</BreadcrumbLink>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
-  ),
+	args: {},
+	render: () => (
+		<Breadcrumb>
+			<BreadcrumbList>
+				<BreadcrumbItem>
+					<BreadcrumbLink href='/'>Home</BreadcrumbLink>
+				</BreadcrumbItem>
+				<BreadcrumbSeparator />
+				<BreadcrumbItem>
+					<BreadcrumbLink href='/library'>Library</BreadcrumbLink>
+				</BreadcrumbItem>
+				<BreadcrumbSeparator />
+				<BreadcrumbItem>
+					<BreadcrumbLink href='/data'>Data</BreadcrumbLink>
+				</BreadcrumbItem>
+			</BreadcrumbList>
+		</Breadcrumb>
+	),
 };

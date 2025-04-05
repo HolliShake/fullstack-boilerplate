@@ -1,11 +1,13 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
-import { ThemeProvider } from '@/components/theme-provider';
-import '../src/styles/globals.css';
+import { ThemeProvider } from '../src/components/theme-provider';
+import '../src/assets/globals.css';
+import { Toaster } from 'sonner';
 
 const withThemeProvider = (Story: any) => (
 	<ThemeProvider>
 		<Story />
+		<Toaster />
 	</ThemeProvider>
 );
 

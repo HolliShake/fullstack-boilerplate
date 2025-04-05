@@ -1,14 +1,14 @@
-import { Input } from "@/components/ui/input"
+import { Input } from '@/components/ui/input';
 
 export function InputDemo() {
-  return <Input type="email" placeholder="Email" />
+	return <Input type='email' placeholder='Email' />;
 }
 
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof InputDemo> = {
-  title: 'Input',
-  component: InputDemo,
+	title: 'Input',
+	component: InputDemo,
 };
 
 export default meta;
@@ -16,5 +16,5 @@ export default meta;
 type Story = StoryObj<typeof InputDemo>;
 
 export const Default: Story = {
-  render: () => <InputDemo />,
+	render: () => <InputDemo />,
 };

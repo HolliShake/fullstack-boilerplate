@@ -1,26 +1,25 @@
-"use client"
+'use client';
 
-import * as React from "react"
+import * as React from 'react';
 
-import { Progress } from "@/components/ui/progress"
+import { Progress } from '@/components/ui/progress';
 
 function ProgressDemo() {
-  const [progress, setProgress] = React.useState(13)
+	const [progress, setProgress] = React.useState(13);
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => setProgress(66), 500)
-    return () => clearTimeout(timer)
-  }, [])
+	React.useEffect(() => {
+		const timer = setTimeout(() => setProgress(66), 500);
+		return () => clearTimeout(timer);
+	}, []);
 
-  return <Progress value={progress} className="w-[60%]" />
+	return <Progress value={progress} className='w-[60%]' />;
 }
 
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof ProgressDemo> = {
-  title: 'Progress',
-  component: ProgressDemo,
-
+	title: 'Progress',
+	component: ProgressDemo,
 };
 
 export default meta;
@@ -28,5 +27,5 @@ export default meta;
 type Story = StoryObj<typeof ProgressDemo>;
 
 export const Default: Story = {
-  render: () => <ProgressDemo />,
+	render: () => <ProgressDemo />,
 };
